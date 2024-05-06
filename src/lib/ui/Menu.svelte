@@ -1,0 +1,24 @@
+<script lang="ts">
+    import { currentSession } from "$lib/stores";
+  </script>
+  
+  <nav class="navbar is-full-width">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/lore">
+          <span class="icon"> <i class="fas fa-map-marker-alt"></i></span><span class="icon mr-1"> 
+            <i class="far fa-sun-alt"></i></span><span><strong>The World of Avatar</strong>
+            </span>
+        </a>
+      </div>
+      <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <a class="navbar-item" href="/lore"> World Map </a>
+          <a class="navbar-item" href="/report"> Report </a>
+          <a class="navbar-item" href="/logout"> Logout [{$currentSession}]</a>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </nav>
+  
