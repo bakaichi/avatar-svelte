@@ -3,5 +3,6 @@
   import { currentSession } from "$lib/stores";
 
   currentSession.set({ name: "", _id: "", token: "" });
+  localStorage.removeItem("twoa");
   goto("/");
 </script>

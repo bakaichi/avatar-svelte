@@ -14,6 +14,7 @@
     let session = await contributionService.login(email, password);
     if (session) {
       currentSession.set(session);
+      localStorage.twoa = JSON.stringify(session);
       goto("/lore");
     } else {
       email = "";

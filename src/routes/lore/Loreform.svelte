@@ -1,9 +1,9 @@
 <script lang="ts">
 import { contributionService } from "$lib/services/contribution-service";
-import { currentSession } from "$lib/stores";
 import Coordinates from "$lib/ui/Coordinates.svelte";
 import type { Character, Lore } from "$lib/types/contribution-types";
 import { get } from "svelte/store";
+import { currentSession, latestContribution } from "$lib/stores";
 
 
 export let characterList: Character[] = [];
@@ -32,6 +32,7 @@ export let characterList: Character[] = [];
           message = "Contribution not completed - some error occurred";
           return;
         }
+        latestContribution.set(lore);
         message = `Thanks! You contributed to ${character.name}'s lore'`;
       }
     } else {
