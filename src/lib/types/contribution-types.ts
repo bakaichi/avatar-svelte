@@ -10,3 +10,17 @@ export interface Session {
     password: string;
     _id?: string;
   }
+
+  export interface Character {
+    name: string;
+    _id: string;
+  }
+  
+  export interface Lore {
+    bookno: number;
+    charactersinv: Character | string;
+    lat: number;
+    lng: number;
+    lore: string;
+    contributor: User | string;
+}

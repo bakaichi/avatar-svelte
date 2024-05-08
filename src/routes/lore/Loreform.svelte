@@ -1,18 +1,20 @@
 <script lang="ts">
 
 import Coordinates from "$lib/ui/Coordinates.svelte";
+import type { Character } from "$lib/types/contribution-types";
 
-  const characerList = [
-    {
-      name: "Zuko"
-    },
-    {
-      name: "Aang"
-    },
-    {
-      name: "Katara"
-    },
-  ];
+export let characterList: Character[] = [];
+//  const characerList = [
+//    {
+//      name: "Zuko"
+//    },
+//    {
+//      name: "Aang"
+//    },
+//    {
+//      name: "Katara"
+//    },
+//  ];
 
   let selectedCharacter = "Aang";
   let lat = 52.160858;
@@ -32,7 +34,7 @@ import Coordinates from "$lib/ui/Coordinates.svelte";
     <label class="label" for="character">Select Characters:</label>
     <div class="select">
       <select bind:value={selectedCharacter}>
-        {#each characerList as character}
+        {#each characterList as character}
           <option>{character.name}</option>
         {/each}
       </select>
