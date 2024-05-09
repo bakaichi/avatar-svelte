@@ -24,3 +24,8 @@ export interface Session {
     lore: string;
     contributor: User | string;
 }
+
+export interface DataSet {
+  labels: string[];
+  datasets: [{values: number[] }];
+}
