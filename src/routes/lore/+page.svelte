@@ -1,4 +1,5 @@
 <script lang="ts">
+    // @ts-ignore
   import { currentSession, subTitle, latestContribution } from "$lib/stores";
   import LoreForm from "./Loreform.svelte";
   import Card from "$lib/ui/Card.svelte";
