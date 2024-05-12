@@ -30,12 +30,11 @@
       maxZoom: 3.5,
     });
 
-    // Explicitly add the "Terrain" layer first if it exists
+    //  add the "Terrain" layer first if it exists
     if (baseMaps['Terrain']) {
       baseMaps['Terrain'].addTo(imap);
     }
 
-    // Add all base maps to the control
     L.control.layers(baseMaps, {}, { collapsed: false }).addTo(imap);
 
     imap.setMaxBounds(bounds);
@@ -44,7 +43,7 @@
       imap.panInsideBounds(bounds, { animate: true });
     });
 
-    initialized = true; // Set flag to avoid reinitialization
+    initialized = true; 
   }
 
   export function addMarker(lat: number, lng: number, popupText: string) {
