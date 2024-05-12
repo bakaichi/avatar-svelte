@@ -1,15 +1,52 @@
 <script lang="ts">
+  import { onMount, afterUpdate } from "svelte";
+  import type { Map as LeafletMap, LatLngBounds, ImageOverlay } from "leaflet";
   import "leaflet/dist/leaflet.css";
-  import { onMount } from "svelte";
-  import type { Control, Map as LeafletMap, LatLngBounds } from "leaflet";
 
-  export let id = "home-map-id";
-  export let height = 80; // height in viewport height (vh) units
+  export let id: string = "home-map-id";
+  export let height: number = 80; // height in viewport height (vh) units
+  export let baseMaps: { [key: string]: ImageOverlay };
 
   let imap: LeafletMap;
-  let control: Control.Layers;
+  let initialized: boolean = false;
 
-  // Function to add markers to the map
+  afterUpdate(() => {
+    if (baseMaps && !initialized) {
+      initMap();
+    }
+  });
+
+  async function initMap() {
+    const L = await import("leaflet");
+    const bounds: LatLngBounds = L.latLngBounds(
+      L.latLng(-90, -180),
+      L.latLng(90, 180)
+    );
+
+    imap = L.map(id, {
+      center: [0, 0],
+      zoom: 3.5,
+      minZoom: 2,
+      maxZoom: 3.5,
+    });
+
+    // Explicitly add the "Terrain" layer first if it exists
+    if (baseMaps['Terrain']) {
+      baseMaps['Terrain'].addTo(imap);
+    }
+
+    // Add all base maps to the control
+    L.control.layers(baseMaps, {}, { collapsed: false }).addTo(imap);
+
+    imap.setMaxBounds(bounds);
+
+    imap.on('drag', () => {
+      imap.panInsideBounds(bounds, { animate: true });
+    });
+
+    initialized = true; // Set flag to avoid reinitialization
+  }
+
   export function addMarker(lat: number, lng: number, popupText: string) {
     if (imap) {
       import("leaflet").then((L) => {
@@ -22,44 +59,10 @@
   };
 
   export function moveTo(lat: number, lng: number) {
-    imap.flyTo({ lat: lat, lng: lng});
-  };
-
-  onMount(() => {
-    if (typeof window !== 'undefined') {
-      import("leaflet").then((L) => {
-        const leaflet = L.default;
-
-        const imageUrl = "https://i.imgur.com/OZtEVSz.png"; // URL of your custom map image
-        const imageBounds: LatLngBounds = leaflet.latLngBounds(
-          leaflet.latLng(-90, -180),
-          leaflet.latLng(90, 180)
-        );
-
-        let imageLayer = leaflet.imageOverlay(imageUrl, imageBounds, {
-          opacity: 1,
-          interactive: false
-        });
-
-        imap = leaflet.map(id, {
-          center: [0, 0],
-          zoom: 3.5,
-          minZoom: 2,
-          maxZoom: 3.5,
-          maxBounds: imageBounds,
-          layers: [imageLayer]
-        });
-
-        imap.setMaxBounds(imageBounds);
-
-        imap.on('drag', () => {
-          imap.panInsideBounds(imageBounds, { animate: true });
-        });
-
-        control = leaflet.control.layers({}, {}).addTo(imap);
-      });
+    if (imap) {
+      imap.flyTo({ lat: lat, lng: lng});
     }
-  });
+  };
 </script>
 
-<div id="{id}" class="box" style="height: {height}vh;"></div>
+<div id="{id}" style="height: {height}vh;"></div>

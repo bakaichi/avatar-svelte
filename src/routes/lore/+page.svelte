@@ -1,5 +1,6 @@
 <script lang="ts">
     // @ts-ignore
+  import Chart from "svelte-frappe-charts";
   import { currentSession, subTitle, latestContribution } from "$lib/stores";
   import LoreForm from "./Loreform.svelte";
   import Card from "$lib/ui/Card.svelte";
@@ -9,11 +10,12 @@
   import type { Character, DataSet, Lore } from "$lib/types/contribution-types";
   import ContributionList from "$lib/ui/ContributionList.svelte";
   import { generateByBook } from "$lib/services/contribution-utils";
-  import Chart from "svelte-frappe-charts";
+  import LeafletMap from "$lib/ui/LeafletMap.svelte";
 
   let characterList: Character[] = [];
   let contributions: Lore [] = [];
   let totalByBook: DataSet;
+  let map: LeafletMap;
 
 
   subTitle.set("Add Lore Here");
@@ -29,6 +31,11 @@
       contributions.push(lore);
       contributions = [...contributions];
       totalByBook = generateByBook(contributions);
+    }
+    if (typeof lore.bookno !== "string") {
+      const popup = `${lore.bookno}`;
+      map.addMarker(lore.lat, lore.lng, popup);
+      map.moveTo(lore.lat, lore.lng);
     }
   });
 </script>
