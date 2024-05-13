@@ -2,6 +2,11 @@
   import { onMount, afterUpdate } from "svelte";
   import type { Map as LeafletMap, LatLngBounds, ImageOverlay } from "leaflet";
   import "leaflet/dist/leaflet.css";
+  import { contributionService } from "$lib/services/contribution-service";
+  import type { Lore } from "$lib/types/contribution-types";
+  import { get } from "svelte/store";
+  import { currentSession } from "$lib/stores";
+  import L from "leaflet";
 
   export let id: string = "home-map-id";
   export let height: number = 80; // height in viewport height (vh) units
@@ -9,6 +14,7 @@
 
   let imap: LeafletMap;
   let initialized: boolean = false;
+  let allMarkers: any[] = [];
 
   afterUpdate(() => {
     if (baseMaps && !initialized) {
@@ -30,38 +36,73 @@
       maxZoom: 3.5,
     });
 
-    //  add the "Terrain" layer first if it exists
     if (baseMaps['Terrain']) {
       baseMaps['Terrain'].addTo(imap);
     }
 
     L.control.layers(baseMaps, {}, { collapsed: false }).addTo(imap);
-
     imap.setMaxBounds(bounds);
 
     imap.on('drag', () => {
       imap.panInsideBounds(bounds, { animate: true });
     });
 
-    initialized = true; 
+    imap.on('baselayerchange', (e) => {
+      updateMarkers(e.name);
+    });
+
+    await loadMarkers();
+    initialized = true;
   }
 
-  export function addMarker(lat: number, lng: number, popupText: string) {
+  async function loadMarkers() {
+    const contributions: Lore[] = await contributionService.getLores(get(currentSession));
+    allMarkers = contributions.map((contribution: Lore) => ({
+      lat: contribution.lat,
+      lng: contribution.lng,
+      popup: `Characters: ${contribution.charactersinv}, Lore: ${contribution.lore}`,
+      nation: contribution.nation,
+    }));
+    updateMarkers('Terrain');
+  }
+
+  function updateMarkers(layerName: string) {
+    imap.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        imap.removeLayer(layer);
+      }
+    });
+
+    allMarkers.forEach(marker => {
+      if (shouldDisplayMarker(marker.nation, layerName)) {
+        addMarker(marker.lat, marker.lng, marker.popup);
+      }
+    });
+  }
+
+  function shouldDisplayMarker(nation: string, layerName: string): boolean {
+    if (layerName === 'Terrain' || layerName === 'Satellite') {
+      return true;
+    }
+    return nation === layerName;
+  }
+
+  function addMarker(lat: number, lng: number, popupText: string) {
     if (imap) {
       import("leaflet").then((L) => {
         const marker = L.marker([lat, lng]).addTo(imap);
-        const popup = L.popup({autoClose: false, closeOnClick: true});
+        const popup = L.popup({ autoClose: false, closeOnClick: true });
         popup.setContent(popupText);
         marker.bindPopup(popup);
       });
     }
-  };
+  }
 
   export function moveTo(lat: number, lng: number) {
     if (imap) {
-      imap.flyTo({ lat: lat, lng: lng});
+      imap.flyTo({ lat: lat, lng: lng });
     }
-  };
+  }
 </script>
 
 <div id="{id}" style="height: {height}vh;"></div>

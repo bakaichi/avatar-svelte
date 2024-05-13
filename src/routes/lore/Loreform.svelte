@@ -4,6 +4,7 @@ import Coordinates from "$lib/ui/Coordinates.svelte";
 import type { Character, Lore } from "$lib/types/contribution-types";
 import { get } from "svelte/store";
 import { currentSession, latestContribution } from "$lib/stores";
+import { determineNation } from "$lib/services/contribution-utils";
 
 
 export let characterList: Character[] = [];
@@ -13,6 +14,7 @@ export let characterList: Character[] = [];
   let lng = -7.15242;
   let addedLore = "";
   let message = "Contribute, I know you wanna!";
+
 
 
   async function contribute() {
@@ -25,7 +27,8 @@ export let characterList: Character[] = [];
           lat: lat,
           lng: lng,
           lore: addedLore,
-          contributor: $currentSession.name
+          contributor: $currentSession.name,
+          nation: determineNation(lat, lng),
         };
         const success = await contributionService.contribute(lore, get(currentSession));
         if (!success) {
@@ -33,7 +36,7 @@ export let characterList: Character[] = [];
           return;
         }
         latestContribution.set(lore);
-        message = `Thanks! You contributed to ${character.name}'s lore'`;
+        message = `Thanks! You contributed to ${lore.nation}'s lore' `;
       }
     } else {
       message = "Please select bookno, characters, and add lore.";

@@ -23,6 +23,7 @@ export interface Session {
     lng: number;
     lore: string;
     contributor: User | string;
+    nation: string;
 }
 
 export interface DataSet {
