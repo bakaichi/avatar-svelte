@@ -6,7 +6,7 @@
   <div class="hero-body">
     <div class="container">
       <div class="column is-4 is-offset-4">
-        <h3 class="title has-text-black has-text-centered">Login to The World of Avatar</h3>
+        <h3 class="title has-text-white has-text-centered">Login to The World of Avatar</h3>
         <div class="box">
           <LoginForm />
         </div>

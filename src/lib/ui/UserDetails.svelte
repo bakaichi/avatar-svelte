@@ -3,7 +3,7 @@
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
-<label class="label">Name</label>
+<label class="label">Username</label>
 <div class="field is-horizontal">
   <div class="field-body">
     <div class="field">

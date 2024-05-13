@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, afterUpdate } from "svelte";
+  import { afterUpdate } from "svelte";
   import type { Map as LeafletMap, LatLngBounds, ImageOverlay } from "leaflet";
   import "leaflet/dist/leaflet.css";
   import { contributionService } from "$lib/services/contribution-service";
