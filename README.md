@@ -6,8 +6,10 @@ An interactive full-stack web application for Avatar (cartoon) enthusiasts to ex
 ## Technologies
 
 - Svelte
+- Typescript
+- Javascript
+- Bulma
 - Node.js
-- Express
 - MongoDB
 - Leaflet.js
 - Svelte-Frappe-Charts
