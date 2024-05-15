@@ -1,4 +1,6 @@
 
+![Avatar Aang](https://github.com/bakaichi/avatar-svelte/assets/99150271/eeecc8f5-866f-4804-9cc5-1c5287e5a629)
+
 # Avatar Themed Dashboard Application
 
 An interactive full-stack web application for Avatar (cartoon) enthusiasts to explore and contribute to a virtual map of the Avatar universe.
