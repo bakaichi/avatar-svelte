@@ -16,8 +16,7 @@ An interactive full-stack web application for Avatar (cartoon) enthusiasts to ex
 
 ## Deployed URLs
 
-- **Glitch**: [colorful-flint-leather.glitch.me](https://colorful-flint-leather.glitch.me)
-- **Render**: [the-world-of-avatar.onrender.com](https://the-world-of-avatar.onrender.com)
+- **Glitch**: [placeholder)
 
 ### Test Accounts
 
