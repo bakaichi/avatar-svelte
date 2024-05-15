@@ -62,6 +62,21 @@ export const contributionService = {
     } catch (error) {
       return [];
     }
-  } 
+  },
+
+  async getLoresById(id: string, session: Session): Promise<Lore | null> {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer" + session.token;
+      const response = await axios.get(`${this.baseUrl}/api/lores/${id}`)
+      if (response.status == 200) {
+        return response.data as Lore;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 
 };

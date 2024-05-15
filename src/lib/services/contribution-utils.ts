@@ -60,4 +60,4 @@ export function determineNation(lat: number, lng: number): string {
     else {
       return "Earth Kingdom";
     }
-  }
+  };

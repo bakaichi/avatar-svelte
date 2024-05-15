@@ -24,6 +24,7 @@ export interface Session {
     lore: string;
     contributor: User | string;
     nation: string;
+    _id: string;
 }
 
 export interface DataSet {

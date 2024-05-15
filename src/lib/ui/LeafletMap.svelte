@@ -60,8 +60,9 @@
     allMarkers = contributions.map((contribution: Lore) => ({
       lat: contribution.lat,
       lng: contribution.lng,
-      popup: `Characters: ${contribution.charactersinv}, Lore: ${contribution.lore}`,
+      popup: `Characters: ${contribution.charactersinv}, <br> Book no.: ${contribution.bookno}`,
       nation: contribution.nation,
+      id: contribution._id,
     }));
     updateMarkers('Terrain');
   }
@@ -75,7 +76,7 @@
 
     allMarkers.forEach(marker => {
       if (shouldDisplayMarker(marker.nation, layerName)) {
-        addMarker(marker.lat, marker.lng, marker.popup);
+        addMarker(marker.lat, marker.lng, marker.popup, marker.id);
       }
     });
   }
@@ -87,12 +88,12 @@
     return nation === layerName;
   }
 
-  function addMarker(lat: number, lng: number, popupText: string) {
+  function addMarker(lat: number, lng: number, popupText: string, id: string) {
     if (imap) {
       import("leaflet").then((L) => {
         const marker = L.marker([lat, lng]).addTo(imap);
         const popup = L.popup({ autoClose: false, closeOnClick: true });
-        popup.setContent(popupText);
+        popup.setContent(`${popupText}<br> <a href="/maps/${id}">Click for details</a>`);
         marker.bindPopup(popup);
       });
     }

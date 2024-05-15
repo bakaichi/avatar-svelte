@@ -14,6 +14,12 @@ export let characterList: Character[] = [];
   let lng = -7.15242;
   let addedLore = "";
   let message = "Contribute, I know you wanna!";
+  
+
+  function generateCustomId(nation: string): string {
+    const timestamp = Date.now().toString();
+    return `${nation}-${timestamp}`;
+  };
 
 
 
@@ -29,6 +35,7 @@ export let characterList: Character[] = [];
           lore: addedLore,
           contributor: $currentSession.name,
           nation: determineNation(lat, lng),
+          _id: generateCustomId(determineNation(lat, lng)),
         };
         const success = await contributionService.contribute(lore, get(currentSession));
         if (!success) {
@@ -36,7 +43,7 @@ export let characterList: Character[] = [];
           return;
         }
         latestContribution.set(lore);
-        message = `Thanks! You contributed to ${lore.nation}'s lore' `;
+        message = `Thanks! You contributed to ${lore.nation}'s lore' ${lore._id} `;
       }
     } else {
       message = "Please select bookno, characters, and add lore.";
