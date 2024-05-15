@@ -9,7 +9,7 @@
   import L from "leaflet";
 
   export let id: string = "home-map-id";
-  export let height: number = 80; // height in viewport height (vh) units
+  export let height: number = 80; // vh
   export let baseMaps: { [key: string]: ImageOverlay };
 
   let imap: LeafletMap;
