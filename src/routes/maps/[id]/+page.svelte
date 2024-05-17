@@ -36,6 +36,18 @@
       errorMessage = "An error occurred while loading the maps";
     }
   });
+
+  async function deleteImage(imageUrl: string) {
+    if (lore) {
+      const session = get(currentSession);
+      const success = await contributionService.deleteImage(lore._id, imageUrl, session);
+      if (success) {
+        lore.images = lore.images.filter(img => img !== imageUrl);
+      } else {
+        console.error("Failed to delete image");
+      }
+    }
+  }
 </script>
 
 <style>
@@ -59,8 +71,21 @@
     gap: 1rem;
   }
   .images img {
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 100px;
+    max-height: 100px;
+    position: relative;
+  }
+  .images .image-container {
+    position: relative;
+  }
+  .images .delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
   }
 </style>
 
@@ -75,7 +100,10 @@
       <LoreList contributions={[lore]} />
       <div class="images">
         {#each lore.images as image}
-          <img src={image} alt="Pictures For Lore" />
+          <div class="image-container">
+            <img src={image} alt="User Added images" />
+            <button class="delete-button" on:click={() => deleteImage(image)}>X</button>
+          </div>
         {/each}
       </div>
     </div>

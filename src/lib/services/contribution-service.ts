@@ -91,5 +91,16 @@ export const contributionService = {
       console.log(error);
       return null;
     }
-  }
+  },
+
+  async deleteImage(loreId: string, imageUrl: string, session: Session): Promise<boolean> {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.post(`${this.baseUrl}/api/lores/deleteImage`, { loreId, imageUrl });
+      return response.data.success === true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
 };
