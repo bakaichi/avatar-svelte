@@ -12,14 +12,14 @@ export function generateByBook(contributionList: Lore[]): DataSet {
 
     contributionList.forEach((contribution) => {
         if (contribution.bookno && contribution.bookno >= 1 && contribution.bookno <= 3) {
-            totalByBook.datasets[0].values[contribution.bookno - 1] += 1;  // Increment the count at the index corresponding to the book number - 1
+            totalByBook.datasets[0].values[contribution.bookno - 1] += 1;  
         }
     });
 
     return totalByBook;
 };
 
-// Generates dataset for a pie chart: Distribution of contributions by nation.
+// distribution of contributions by nation.
 export function generateByNation(contributionList: Lore[]): DataSet {
   const nations: { [key: string]: number } = {};
 
@@ -42,7 +42,7 @@ export function generateByNation(contributionList: Lore[]): DataSet {
   };
 }
 
-// Generates dataset for a line chart: Contributions over time (by book number).
+// contributions over time (by book number).
 export function generateOverTime(contributionList: Lore[]): DataSet {
   const contributionsByBook: number[] = [0, 0, 0];
 
@@ -62,7 +62,7 @@ export function generateOverTime(contributionList: Lore[]): DataSet {
   };
 }
 
-// Generates dataset for a donut chart: Contributions per character.
+// contributions per character.
 export function generateByCharacter(contributionList: Lore[]): DataSet {
   const characters: { [key: string]: number } = {};
 
