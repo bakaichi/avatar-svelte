@@ -1,7 +1,6 @@
 import axios from "axios";
 import type { Session, User, Character, Lore } from "$lib/types/contribution-types";
 
-
 export const contributionService = {
   baseUrl: "http://localhost:4000",
 
@@ -44,6 +43,21 @@ export const contributionService = {
     }
   },
 
+  async contributeWithImages(formData: FormData, session: Session) {
+    try {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
+      const response = await axios.post(this.baseUrl + "/api/characters/" + JSON.parse(formData.get("lore") as string).charactersinv + "/lores", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.status === 200;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+
   async getCharacters(session: Session): Promise<Character[]> {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer " + session.token;
@@ -67,7 +81,7 @@ export const contributionService = {
   async getLoresById(id: string, session: Session): Promise<Lore | null> {
     try {
       axios.defaults.headers.common["Authorization"] = "Bearer" + session.token;
-      const response = await axios.get(`${this.baseUrl}/api/lores/${id}`)
+      const response = await axios.get(`${this.baseUrl}/api/lores/${id}`);
       if (response.status == 200) {
         return response.data as Lore;
       } else {
@@ -78,5 +92,4 @@ export const contributionService = {
       return null;
     }
   }
-
 };

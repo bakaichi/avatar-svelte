@@ -53,6 +53,15 @@
   .list {
     flex: 1;
   }
+  .images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .images img {
+    max-width: 300px;
+    max-height: 300px;
+  }
 </style>
 
 <div class="container">
@@ -64,6 +73,11 @@
     </div>
     <div class="list">
       <LoreList contributions={[lore]} />
+      <div class="images">
+        {#each lore.images as image}
+          <img src={image} alt="Pictures For Lore" />
+        {/each}
+      </div>
     </div>
   {:else if errorMessage}
     <p>{errorMessage}</p>

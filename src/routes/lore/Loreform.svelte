@@ -1,52 +1,64 @@
 <script lang="ts">
-import { contributionService } from "$lib/services/contribution-service";
-import Coordinates from "$lib/ui/Coordinates.svelte";
-import type { Character, Lore } from "$lib/types/contribution-types";
-import { get } from "svelte/store";
-import { currentSession, latestContribution } from "$lib/stores";
-import { determineNation } from "$lib/services/contribution-utils";
+  import { contributionService } from "$lib/services/contribution-service";
+  import Coordinates from "$lib/ui/Coordinates.svelte";
+  import type { Character, Lore } from "$lib/types/contribution-types";
+  import { get } from "svelte/store";
+  import { currentSession, latestContribution } from "$lib/stores";
+  import { determineNation } from "$lib/services/contribution-utils";
 
-
-export let characterList: Character[] = [];
+  export let characterList: Character[] = [];
   let bookno = 0;
   let selectedCharacter = "";
   let lat = 52.160858;
   let lng = -7.15242;
   let addedLore = "";
   let message = "Contribute, I know you wanna!";
-  
+  let images: FileList | null = null;
 
   function generateCustomId(nation: string): string {
     const timestamp = Date.now().toString();
     return `${nation}-${timestamp}`;
-  };
-
-
+  }
 
   async function contribute() {
     if (selectedCharacter && bookno && addedLore) {
       const character = characterList.find((character) => character._id === selectedCharacter);
       if (character) {
-        const lore: Lore = {
+        const lore: Partial<Lore> = {
           bookno: bookno,
           charactersinv: selectedCharacter,
           lat: lat,
           lng: lng,
           lore: addedLore,
-          contributor: $currentSession.name,
+          contributor: get(currentSession)?.name ?? "Unknown",
           nation: determineNation(lat, lng),
-          _id: generateCustomId(determineNation(lat, lng)),
         };
-        const success = await contributionService.contribute(lore, get(currentSession));
+
+        const formData = new FormData();
+        formData.append("lore", JSON.stringify(lore));
+        if (images) {
+          for (let i = 0; i < images.length; i++) {
+            formData.append("images", images[i]);
+          }
+        }
+
+        const success = await contributionService.contributeWithImages(formData, get(currentSession));
         if (!success) {
           message = "Contribution not completed - some error occurred";
           return;
         }
-        latestContribution.set(lore);
-        message = `Thanks! You contributed to ${lore.nation}'s lore' ${lore._id} `;
+        latestContribution.set(lore as Lore);
+        message = `Thanks! You contributed to ${lore.nation}'s lore' ${lore.charactersinv} `;
       }
     } else {
       message = "Please select bookno, characters, and add lore.";
+    }
+  }
+
+  function handleFileChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files) {
+      images = target.files;
     }
   }
 </script>
@@ -70,6 +82,10 @@ export let characterList: Character[] = [];
   <div class="field">
     <label class="label" for="lore">Enter Lore:</label>
     <input bind:value={addedLore} class="input" type="text" placeholder="Enter lore" name="lore" id="lore" />
+  </div>
+  <div class="field">
+    <label class="label" for="images">Upload Images:</label>
+    <input id="images" type="file" multiple accept="image/*" on:change={handleFileChange} />
   </div>
   <div class="field">
     <div class="control">

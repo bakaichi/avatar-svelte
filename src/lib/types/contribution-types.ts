@@ -25,6 +25,7 @@ export interface Session {
     contributor: User | string;
     nation: string;
     _id: string;
+    images: string[];
 }
 
 export interface DataSet {
