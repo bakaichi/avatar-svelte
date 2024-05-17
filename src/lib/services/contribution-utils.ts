@@ -19,6 +19,73 @@ export function generateByBook(contributionList: Lore[]): DataSet {
     return totalByBook;
 };
 
+// Generates dataset for a pie chart: Distribution of contributions by nation.
+export function generateByNation(contributionList: Lore[]): DataSet {
+  const nations: { [key: string]: number } = {};
+
+  contributionList.forEach((contribution) => {
+      if (contribution.nation) {
+          if (!nations[contribution.nation]) {
+              nations[contribution.nation] = 0;
+          }
+          nations[contribution.nation] += 1;
+      }
+  });
+
+  return {
+      labels: Object.keys(nations),
+      datasets: [
+          {
+              values: Object.values(nations),
+          }
+      ]
+  };
+}
+
+// Generates dataset for a line chart: Contributions over time (by book number).
+export function generateOverTime(contributionList: Lore[]): DataSet {
+  const contributionsByBook: number[] = [0, 0, 0];
+
+  contributionList.forEach((contribution) => {
+      if (contribution.bookno >= 1 && contribution.bookno <= 3) {
+          contributionsByBook[contribution.bookno - 1] += 1;
+      }
+  });
+
+  return {
+      labels: ["Book 1", "Book 2", "Book 3"],
+      datasets: [
+          {
+              values: contributionsByBook,
+          }
+      ]
+  };
+}
+
+// Generates dataset for a donut chart: Contributions per character.
+export function generateByCharacter(contributionList: Lore[]): DataSet {
+  const characters: { [key: string]: number } = {};
+
+  contributionList.forEach((contribution) => {
+      const charName = typeof contribution.charactersinv === "string" ? contribution.charactersinv : contribution.charactersinv.name;
+      if (charName) {
+          if (!characters[charName]) {
+              characters[charName] = 0;
+          }
+          characters[charName] += 1;
+      }
+  });
+
+  return {
+      labels: Object.keys(characters),
+      datasets: [
+          {
+              values: Object.values(characters),
+          }
+      ]
+  };
+}
+
 
 export function determineNation(lat: number, lng: number): string {
     // Fire Nation
