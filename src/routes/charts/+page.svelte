@@ -77,8 +77,13 @@
             label: {
               fontSize: 14,
               fontWeight: 'bold',
-              color: '#ffffff'
-            }
+              color: '#ffffff',
+              formatter: '{b}: {d}%' // format labels to show the percentage
+            },
+            labelLine: {
+              length: 18, // length of lines to the labels
+              length2: 25 
+            },
           }],
           textStyle: {
             color: '#ffffff'
@@ -137,13 +142,14 @@
           <div id="chartByBook" style="width: 100%; height: 400px;"></div>
       </div>
       <div class="column is-half box has-text-centered">
-          <h1 class="title is-4">Distribution by Nation</h1>
-          <div id="chartByNation" style="width: 100%; height: 400px;"></div>
-      </div>
-      <div class="column is-half box has-text-centered">
           <h1 class="title is-4">Contributions To Books</h1>
           <div id="chartOverTime" style="width: 100%; height: 400px;"></div>
       </div>
+      <div class="column  box has-text-centered">
+          <h1 class="title is-4">Distribution by Nation</h1>
+          <div id="chartByNation" style="width: 100%; height: 400px;"></div>
+      </div>
+
     </div>
   </div>
   <div class="column is-one-third has-text-centered">
