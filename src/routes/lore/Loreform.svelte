@@ -5,6 +5,7 @@
   import { get } from "svelte/store";
   import { currentSession, latestContribution } from "$lib/stores";
   import { determineNation } from "$lib/services/contribution-utils";
+  import { sanitizeInput, sanitizeOutput } from "$lib/services/sanitization";
 
   export let characterList: Character[] = [];
   let bookno = 0;
@@ -15,21 +16,16 @@
   let message = "Contribute, I know you wanna!";
   let images: FileList | null = null;
 
-  function generateCustomId(nation: string): string {
-    const timestamp = Date.now().toString();
-    return `${nation}-${timestamp}`;
-  }
-
   async function contribute() {
     if (selectedCharacter && bookno && addedLore) {
       const character = characterList.find((character) => character._id === selectedCharacter);
       if (character) {
         const lore: Partial<Lore> = {
           bookno: bookno,
-          charactersinv: selectedCharacter,
+          charactersinv: sanitizeInput(selectedCharacter),
           lat: lat,
           lng: lng,
-          lore: addedLore,
+          lore: sanitizeInput(addedLore),
           contributor: get(currentSession)?.name ?? "Unknown",
           nation: determineNation(lat, lng),
         };
@@ -96,6 +92,6 @@
 
 <div class="box mt-4">
   <div class="content has-text-centered">
-    {message}
+    {@html sanitizeOutput(message)}
   </div>
 </div>

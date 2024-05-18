@@ -1,6 +1,7 @@
 <!-- lib/ui/LoreList.svelte -->
 <script lang="ts">
     import type { Lore } from "$lib/types/contribution-types";
+    import {sanitizeOutput} from "$lib/services/sanitization"
   
     export let contributions: Lore[];
   </script>
@@ -21,8 +22,8 @@
           <td>{contribution.charactersinv}</td>
           <td>{contribution.lat}</td>
           <td>{contribution.lng}</td>
-          <td>{contribution.lore}</td>
-          <td>{contribution.contributor}</td>
+          <td>{sanitizeOutput(contribution.lore)}</td>     
+         <td>{contribution.contributor}</td>
         </tr>
       {/each}
     </tbody>
