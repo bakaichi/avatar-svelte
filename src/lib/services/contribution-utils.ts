@@ -42,26 +42,6 @@ export function generateByNation(contributionList: Lore[]): DataSet {
   };
 }
 
-// contributions over time (by book number).
-export function generateOverTime(contributionList: Lore[]): DataSet {
-  const contributionsByBook: number[] = [0, 0, 0];
-
-  contributionList.forEach((contribution) => {
-      if (contribution.bookno >= 1 && contribution.bookno <= 3) {
-          contributionsByBook[contribution.bookno - 1] += 1;
-      }
-  });
-
-  return {
-      labels: ["Book 1", "Book 2", "Book 3"],
-      datasets: [
-          {
-              values: contributionsByBook,
-          }
-      ]
-  };
-}
-
 // contributions per character.
 export function generateByCharacter(contributionList: Lore[]): DataSet {
   const characters: { [key: string]: number } = {};

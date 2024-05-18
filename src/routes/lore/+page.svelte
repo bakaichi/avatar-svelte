@@ -67,7 +67,7 @@
     </Card>
   </div>
   <div class="column">
-    <Card title="Please Donate">
+    <Card title="Contribute Here">
       <LoreForm {characterList} />
     </Card>
   </div>

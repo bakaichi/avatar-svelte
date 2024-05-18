@@ -5,7 +5,7 @@
   import { currentSession, subTitle } from "$lib/stores";
   import { get } from "svelte/store";
   import type { DataSet } from "$lib/types/contribution-types";
-  import { generateByBook, generateByNation, generateOverTime, generateByCharacter } from "$lib/services/contribution-utils";
+  import { generateByBook, generateByNation, generateByCharacter } from "$lib/services/contribution-utils";
 
   let totalByBook: DataSet;
   let totalByNation: DataSet;
@@ -18,7 +18,7 @@
       const contributionList = await contributionService.getLores(get(currentSession));
       totalByBook = generateByBook(contributionList);
       totalByNation = generateByNation(contributionList);
-      totalOverTime = generateOverTime(contributionList);
+      totalOverTime = generateByBook(contributionList);
       totalByCharacter = generateByCharacter(contributionList);
 
       renderChart('chartByBook', totalByBook, 'bar');
@@ -141,7 +141,7 @@
           <div id="chartByNation" style="width: 100%; height: 400px;"></div>
       </div>
       <div class="column is-half box has-text-centered">
-          <h1 class="title is-4">Contributions Over Time</h1>
+          <h1 class="title is-4">Contributions To Books</h1>
           <div id="chartOverTime" style="width: 100%; height: 400px;"></div>
       </div>
     </div>

@@ -103,4 +103,14 @@ export const contributionService = {
       return false;
     }
   },
+
+  async getAllLores(): Promise<Lore[]> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/api/lores`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
 };
