@@ -4,6 +4,7 @@
   import { contributionService } from "$lib/services/contribution-service";
   import SingleLoreMap from "$lib/ui/SingleLoreMap.svelte";
   import LoreList from "$lib/ui/LoreList.svelte";
+  import ImageSlider from "$lib/ui/ImageSlider.svelte"; 
   import { get } from "svelte/store";
   import { currentSession, subTitle } from "$lib/stores";
   import { initializeBaseMaps } from "$lib/services/baseMaps";
@@ -65,32 +66,13 @@
   .list {
     flex: 1;
   }
-  .images {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .images img {
-    max-width: 100px;
-    max-height: 100px;
-    position: relative;
-  }
-  .images .image-container {
-    position: relative;
-  }
-  .images .delete-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
 </style>
 
-<div class="container">
-  {#if lore}
+{#if lore}
+  {#if lore.images && lore.images.length > 0}
+    <ImageSlider images={lore.images} />
+  {/if}
+  <div class="container">
     <div class="maps">
       <SingleLoreMap lore={lore} mapType="Terrain" {baseMaps} />
       <SingleLoreMap lore={lore} mapType="Satellite" {baseMaps} />
@@ -98,18 +80,10 @@
     </div>
     <div class="list">
       <LoreList contributions={[lore]} />
-      <div class="images">
-        {#each lore.images as image}
-          <div class="image-container">
-            <img src={image} alt="User Added images" />
-            <button class="delete-button" on:click={() => deleteImage(image)}>X</button>
-          </div>
-        {/each}
-      </div>
     </div>
-  {:else if errorMessage}
-    <p>{errorMessage}</p>
-  {:else}
-    <p>Loading...</p>
-  {/if}
-</div>
+  </div>
+{:else if errorMessage}
+  <p>{errorMessage}</p>
+{:else}
+  <p>Loading...</p>
+{/if}

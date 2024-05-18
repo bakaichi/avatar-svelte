@@ -1,6 +1,5 @@
 <script lang="ts">
-  // @ts-ignore
-  import Chart from "svelte-frappe-charts";
+  import * as echarts from 'echarts';
   import { onMount } from "svelte";
   import { contributionService } from "$lib/services/contribution-service";
   import { currentSession, subTitle } from "$lib/stores";
@@ -21,27 +20,129 @@
       totalByNation = generateByNation(contributionList);
       totalOverTime = generateOverTime(contributionList);
       totalByCharacter = generateByCharacter(contributionList);
+
+      renderChart('chartByBook', totalByBook, 'bar');
+      renderChart('chartByNation', totalByNation, 'pie');
+      renderChart('chartOverTime', totalOverTime, 'line');
+      renderChart('chartByCharacter', totalByCharacter, 'donut');
   });
+
+  function renderChart(containerId: string, data: DataSet, type: 'bar' | 'pie' | 'line' | 'donut') {
+    const chartDom = document.getElementById(containerId);
+    const myChart = echarts.init(chartDom!); // Assert that chartDom is not null
+    const options = getChartOptions(data, type);
+    myChart.setOption(options);
+  }
+
+  function getChartOptions(data: DataSet, type: 'bar' | 'pie' | 'line' | 'donut') {
+    let options = {};
+    switch(type) {
+      case 'bar':
+        options = {
+          xAxis: { 
+            type: 'category', 
+            data: data.labels,
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: 'bold'
+            }
+          },
+          yAxis: { 
+            type: 'value',
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: 'bold'
+            }
+          },
+          series: [{ 
+            data: data.datasets[0].values, 
+            type: 'bar',
+            label: {
+              show: true,
+              position: 'top',
+              fontSize: 14,
+              fontWeight: 'bold',
+              color: '#ffffff'
+            }
+          }]
+        };
+        break;
+      case 'pie':
+      case 'donut':
+        options = {
+          series: [{
+            type: 'pie',
+            radius: type === 'donut' ? ['50%', '70%'] : '50%',
+            data: data.labels.map((label: string, index: number) => ({ name: label, value: data.datasets[0].values[index] })),
+            label: {
+              fontSize: 14,
+              fontWeight: 'bold',
+              color: '#ffffff'
+            }
+          }],
+          textStyle: {
+            color: '#ffffff'
+          }
+        };
+        break;
+      case 'line':
+        options = {
+          xAxis: { 
+            type: 'category', 
+            data: data.labels,
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: 'bold',
+              color: '#ffffff'
+            }
+          },
+          yAxis: { 
+            type: 'value',
+            axisLabel: {
+              fontSize: 14,
+              fontWeight: 'bold',
+              color: '#ffffff'
+            }
+          },
+          series: [{ 
+            data: data.datasets[0].values, 
+            type: 'line',
+            label: {
+              show: true,
+              position: 'top',
+              fontSize: 14,
+              fontWeight: 'bold',
+              color: '#ffffff'
+            }
+          }],
+          textStyle: {
+            color: '#ffffff'
+          }
+        };
+        break;
+    }
+    return options;
+  }
 </script>
 
 <div class="columns">
   <div class="column is-two-thirds">
     <div class="columns is-multiline">
+      <div class="column is-half box has-text-centered" style="width: 100%">
+        <h1 class="title is-4">Contributions per Character</h1>
+        <div id="chartByCharacter" style="width: 100%; height: 400px;"></div>
+    </div>
       <div class="column is-half box has-text-centered">
           <h1 class="title is-4">Contributions by Book Number</h1>
-          <Chart data={totalByBook} type="bar" />
+          <div id="chartByBook" style="width: 100%; height: 400px;"></div>
       </div>
       <div class="column is-half box has-text-centered">
           <h1 class="title is-4">Distribution by Nation</h1>
-          <Chart data={totalByNation} type="pie" maxSlices="4" />
+          <div id="chartByNation" style="width: 100%; height: 400px;"></div>
       </div>
       <div class="column is-half box has-text-centered">
           <h1 class="title is-4">Contributions Over Time</h1>
-          <Chart data={totalOverTime} type="line" />
-      </div>
-      <div class="column is-half box has-text-centered">
-          <h1 class="title is-4">Contributions per Character</h1>
-          <Chart data={totalByCharacter} type="donut" maxSlices="4" />
+          <div id="chartOverTime" style="width: 100%; height: 400px;"></div>
       </div>
     </div>
   </div>
@@ -55,10 +156,18 @@
     width: 100%;
     max-width: auto;
     height: auto;
-    margin: 0 auto;
+    margin: 5vh;
   }
 
   .has-text-centered {
     text-align: center;
+  }
+
+  .box {
+    background-color: #1f1224; /* chart background */
+  }
+
+  .title {
+    color: #ffffff; 
   }
 </style>
