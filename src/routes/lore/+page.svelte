@@ -30,11 +30,12 @@
       contributions = [...contributions];
       totalByBook = generateByBook(contributions);
       renderChart('chartByBook', totalByBook, 'bar');
-    }
-    if (typeof lore.bookno !== "string") {
-      const popup = `${lore.bookno}`;
-      map.addMarker(lore.lat, lore.lng, popup);
-      map.moveTo(lore.lat, lore.lng);
+
+      if (lore.bookno !== undefined && lore.lat !== undefined && lore.lng !== undefined) {
+        const popup = `${lore.bookno}`;
+        map.addMarker(lore.lat, lore.lng, popup, lore._id);
+        map.moveTo(lore.lat, lore.lng);
+      }
     }
   });
 
