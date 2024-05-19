@@ -2,7 +2,8 @@ import axios from "axios";
 import type { Session, User, Character, Lore } from "$lib/types/contribution-types";
 
 export const contributionService = {
-  baseUrl: "http://localhost:4000",
+  //baseUrl: "http://localhost:4000",
+  baseUrl: "https://the-world-of-api.onrender.com",
 
   async signup(user: User): Promise<boolean> {
     try {
