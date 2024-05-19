@@ -30,4 +30,5 @@
 
 <Card title="Lore Locations">
   <LeafletMap bind:this={map} height={70} baseMaps={baseMaps} />
+  <a href="https://i.imgur.com/u08IGSY.png">click for legend</a>
 </Card>
