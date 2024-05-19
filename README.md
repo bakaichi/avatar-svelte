@@ -50,3 +50,7 @@ cd the-world-of-avatar2
 npm install
 npm run dev
 # Open your browser and go to localhost:...
+
+
+## Notes
+Its currently dependant on localhost to be running for "the-world-of-api" to run. 
