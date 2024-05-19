@@ -72,7 +72,7 @@
 
 {#if lore}
   {#if lore.images && lore.images.length > 0}
-    <ImageSlider images={lore.images} />
+    <ImageSlider images={lore.images} onDelete={deleteImage} />
   {/if}
   <div class="container">
     <div class="maps">

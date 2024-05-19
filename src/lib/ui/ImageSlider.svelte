@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   export let images: string[] = [];
+  export let onDelete: (imageUrl: string) => void;
+
   let slideIndex = 0;
 
   function showSlides(n: number) {
@@ -32,6 +34,10 @@
     }
   }
 
+  function deleteImage(imageUrl: string) {
+    onDelete(imageUrl);
+  }
+
   onMount(() => {
     showSlides(slideIndex);
   });
@@ -42,11 +48,11 @@
     position: relative;
     max-width: 100%;
     margin: auto;
-    height: 500px; /* height for the container */
+    height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #313131; /* container bg color */
+    background-color: #313131;
     overflow: hidden;
     margin-bottom: 10vh;
   }
@@ -54,15 +60,15 @@
   .mySlides {
     display: none;
     justify-content: center;
-    align-items: center; 
-    height: 100%; 
-    width: 100%; 
+    align-items: center;
+    height: 100%;
+    width: 100%;
   }
 
   .mySlides img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
+    object-fit: contain;
   }
 
   .prev, .next {
@@ -94,12 +100,24 @@
   .prev:hover, .next:hover {
     background-color: rgba(0,0,0,0.8);
   }
+
+  .delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
 </style>
 
 <div class="slideshow-container">
   {#each images as image, i}
     <div class="mySlides fade">
       <img src={image} alt={`Slide ${i + 1}`}>
+      <button class="delete-btn" on:click={() => deleteImage(image)}>Delete</button>
     </div>
   {/each}
 
