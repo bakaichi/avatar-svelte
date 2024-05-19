@@ -3,7 +3,7 @@
 
 # Avatar Themed Dashboard Application
 
-An interactive full-stack web application for Avatar (cartoon) enthusiasts to explore and contribute to a virtual map of the Avatar universe.
+An interactive front-end web application for Avatar (cartoon) enthusiasts to explore and contribute to a virtual map of the Avatar universe.
 
 ## Technologies
 
