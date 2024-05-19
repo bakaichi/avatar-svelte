@@ -39,22 +39,6 @@
     border-style: solid;
     border-width: 0;
   }
-
-  html {
-    background: #01012a;
-    color: #33def4;
-  }
-
-  html, body {
-    overscroll-behavior: none;
-    font-family: Montserrat, sans-serif;
-    overflow: hidden;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .options {
     display: flex;
     flex-direction: row;
