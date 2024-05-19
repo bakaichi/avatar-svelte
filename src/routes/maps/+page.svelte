@@ -14,21 +14,30 @@
   let baseMaps: { [key: string]: ImageOverlay };
 
   onMount(async () => {
-    baseMaps = await initializeBaseMaps();
+    try {
+      baseMaps = await initializeBaseMaps();
 
-    const contributions = await contributionService.getLores(get(currentSession));
-    contributions.forEach((contribution: Lore) => {
-      if (typeof contribution.lore == "string") {
-        const popup = `Characters: ${contribution.charactersinv} <br>`;
-        map.addMarker(contribution.lat, contribution.lng, popup);
-      }
-    });
-    const lastContribution = contributions[contributions.length -1];
-    if (lastContribution) map.moveTo(lastContribution.lat, lastContribution.lng);
+      const contributions = await contributionService.getLores(get(currentSession));
+      contributions.forEach((contribution: Lore) => {
+        if (typeof contribution.lore == "string") {
+          const popup = `Characters: ${contribution.charactersinv} <br>`;
+          map.addMarker(contribution.lat, contribution.lng, popup, contribution._id);
+        }
+      });
+      const lastContribution = contributions[contributions.length -1];
+      if (lastContribution) map.moveTo(lastContribution.lat, lastContribution.lng);
+    } catch (error) {
+      console.error('Error initializing map or loading contributions:', error);
+    }
   });
 </script>
 
 <Card title="Lore Locations">
-  <LeafletMap bind:this={map} height={70} baseMaps={baseMaps} />
-  <a href="https://i.imgur.com/u08IGSY.png">click for legend</a>
+  {#if baseMaps}
+    <LeafletMap bind:this={map} height={70} {baseMaps} />
+    <a href="https://i.imgur.com/u08IGSY.png">click for legend</a>
+  {:else}
+    <p>Loading map...</p>
+  {/if}
 </Card>
+

@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { afterUpdate } from "svelte";
+  import { onMount } from "svelte";
   import type { Map as LeafletMap, LatLngBounds, ImageOverlay } from "leaflet";
   import "leaflet/dist/leaflet.css";
   import { contributionService } from "$lib/services/contribution-service";
   import type { Lore } from "$lib/types/contribution-types";
   import { get } from "svelte/store";
   import { currentSession } from "$lib/stores";
-  import L from "leaflet";
 
   export let id: string = "home-map-id";
   export let height: number = 80; // vh
@@ -15,21 +14,23 @@
   let imap: LeafletMap;
   let initialized: boolean = false;
   let allMarkers: any[] = [];
+  let leaflet: typeof import('leaflet');
 
-  afterUpdate(() => {
-    if (baseMaps && !initialized) {
+  onMount(() => {
+    // ensuring that the code runs only on the client side
+    if (typeof window !== 'undefined' && baseMaps) {
       initMap();
     }
   });
 
   async function initMap() {
-    const L = await import("leaflet");
-    const bounds: LatLngBounds = L.latLngBounds(
-      L.latLng(-90, -180),
-      L.latLng(90, 180)
+    leaflet = await import("leaflet");
+    const bounds: LatLngBounds = leaflet.latLngBounds(
+      leaflet.latLng(-90, -180),
+      leaflet.latLng(90, 180)
     );
 
-    imap = L.map(id, {
+    imap = leaflet.map(id, {
       center: [0, 0],
       zoom: 3.5,
       minZoom: 2,
@@ -40,7 +41,7 @@
       baseMaps['Terrain'].addTo(imap);
     }
 
-    L.control.layers(baseMaps, {}, { collapsed: false }).addTo(imap);
+    leaflet.control.layers(baseMaps, {}, { collapsed: false }).addTo(imap);
     imap.setMaxBounds(bounds);
 
     imap.on('drag', () => {
@@ -69,7 +70,7 @@
 
   function updateMarkers(layerName: string) {
     imap.eachLayer((layer) => {
-      if (layer instanceof L.Marker) {
+      if (layer instanceof leaflet.Marker) {
         imap.removeLayer(layer);
       }
     });
@@ -88,14 +89,10 @@
     return nation === layerName;
   }
 
-  function addMarker(lat: number, lng: number, popupText: string, id: string) {
+  export function addMarker(lat: number, lng: number, popupText: string, id: string) {
     if (imap) {
-      import("leaflet").then((L) => {
-        const marker = L.marker([lat, lng]).addTo(imap);
-        const popup = L.popup({ autoClose: false, closeOnClick: true });
-        popup.setContent(`${popupText}<br> <a href="/maps/${id}">Click for details</a>`);
-        marker.bindPopup(popup);
-      });
+      leaflet.marker([lat, lng]).addTo(imap)
+        .bindPopup(`${popupText}<br> <a href="/maps/${id}">Click for details</a>`);
     }
   }
 

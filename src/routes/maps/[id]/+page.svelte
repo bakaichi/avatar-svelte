@@ -65,7 +65,8 @@
   }
   .list {
     flex: 1;
-    margin-right: 4vh;
+    margin-right: 10rem;
+    padding: 1rem;
   }
 </style>
 
