@@ -3,7 +3,7 @@
     import Card from "$lib/ui/Card.svelte";
     import { subTitle } from "$lib/stores";
 
-    subTitle.set("Complete Image Gallery")
+    subTitle.set("Recent Image Gallery")
   </script>
   
 
