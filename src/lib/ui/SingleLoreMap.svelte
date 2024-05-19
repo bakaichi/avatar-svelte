@@ -3,7 +3,6 @@
     import type { Lore } from "$lib/types/contribution-types";
     import type { ImageOverlay, Map as LeafletMap } from "leaflet";
     import L from "leaflet";
-    import "leaflet/dist/leaflet.css";
     import { contributionService } from "$lib/services/contribution-service";
     import { get } from "svelte/store";
     import { currentSession } from "$lib/stores";

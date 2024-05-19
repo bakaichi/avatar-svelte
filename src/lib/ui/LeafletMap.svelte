@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { Map as LeafletMap, LatLngBounds, ImageOverlay } from "leaflet";
-  import "leaflet/dist/leaflet.css";
   import { contributionService } from "$lib/services/contribution-service";
   import type { Lore } from "$lib/types/contribution-types";
   import { get } from "svelte/store";
