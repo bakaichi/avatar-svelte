@@ -1,5 +1,5 @@
 <script>
-    import Gallery from './Gallery.svelte';
+    import Gallery from '../../lib/ui/Gallery.svelte';
     import Card from "$lib/ui/Card.svelte";
     import { subTitle } from "$lib/stores";
 

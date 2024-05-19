@@ -26,9 +26,6 @@
         doubleClickZoom: false,
         scrollWheelZoom: true,
         dragging: true,
-        touchZoom: false,
-        boxZoom: false,
-        keyboard: false
       });
   
       map.setMaxBounds(bounds);

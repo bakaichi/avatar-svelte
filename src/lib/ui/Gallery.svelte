@@ -10,7 +10,7 @@
   onMount(async () => {
     try {
       const lores: Lore[] = await contributionService.getAllLores();
-      images = lores.flatMap(lore => lore.images).slice(-7); // Get the most recent 5 images
+      images = lores.flatMap(lore => lore.images).slice(-6); // Get the most recent 5 images
     } catch (error) {
       console.error('Error fetching lores:', error);
     } finally {
@@ -152,7 +152,6 @@
           </div>
           <div class="info">
             <div class="main">Image {index + 1}</div>
-            <div class="sub">Description {index + 1}</div>
           </div>
         </div>
       </button>
