@@ -18,7 +18,7 @@ An interactive full-stack web application for Avatar (cartoon) enthusiasts to ex
 
 ## Deployed URLs
 
-- **Glitch**: [placeholder)
+- **Glitch**: [[vercel)](https://avatar-svelte.vercel.app/)
 
 ### Test Accounts
 
